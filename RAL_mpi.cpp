@@ -997,6 +997,8 @@ void RALIterationNew (TempRateMats* jobList, int* topMatrix, int numLineTopMat,
 	// clear memory
 	resultList->clear();
 	appendResultList->clear();
+	if (edgeOrder != NULL)
+		delete[] edgeOrder;
 }
 
 /*

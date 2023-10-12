@@ -89,7 +89,8 @@ int* getEdgeOrder(ParameterSet* ps, int unRooted) {
 		edge_lens.insert(pair<double,int>(curr_len, i));
 	}
 	
-	edgeOrder = (int*) malloc(sizeof(int)*ps->num_edges);
+	//  edgeOrder = (int*) malloc(sizeof(int)*ps->num_edges);
+	edgeOrder = new int[ps->num_edges];
 	
 	i=0;
 	for (rit=edge_lens.rbegin(); rit!=edge_lens.rend(); rit++) {

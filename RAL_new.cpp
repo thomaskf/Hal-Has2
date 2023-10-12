@@ -971,6 +971,8 @@ void RALIterationNew (TempRateMats* rateMatrixList, int* topMatrix, int numLineT
 
 	// clear the job allocation array
 	delete[] jobAllocated;
+	if (edgeOrder != NULL)
+		delete[] edgeOrder;
 }
 
 
