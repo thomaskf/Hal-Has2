@@ -742,8 +742,9 @@ void ParameterSet::showContent(string &outStr, int* topMatrix, vector<string>* l
 			// show the information of the rate matrix
 			outStr.append("[GTR rate parameters and nucleotide distribution of edge leading to each node]\n");
 			outStr.append("      \t");
-			outStr.append("S1\tS2\tS3\tS4\tS5\tS6");
-			outStr.append("\tPi_1\tPi_2\tPi_3\tPi_4\n");
+			// outStr.append("S1\tS2\tS3\tS4\tS5\tS6");
+            outStr.append("S_AC\tS_AG\tS_AT\tS_CG\tS_CT\tS_GT");
+			outStr.append("\tPi_A\tPi_C\tPi_G\tPi_T\n");
 			for (int i=0; i<num_edges; i++) {
 				if (topMatrix!=NULL) {
 					if (topMatrix[i] < 0) {
