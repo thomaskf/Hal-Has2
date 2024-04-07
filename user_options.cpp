@@ -1117,7 +1117,7 @@ void UserOptions::showSummary(int isMPI) {
 
     // show regularization if so
     if (C_REG == 1)
-        cout << " (regularization)";
+        cout << "(regularization) ";
 
 	cout << "Version " << VERSION << endl << endl;
 
