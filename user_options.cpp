@@ -202,16 +202,24 @@ void UserOptions::setPreciseModeMaxIT() {
 // To show the usage of the HAL BU program
 void UserOptions::outputHALBUUsage(char* progName, int isMPI) {
 	cout << "================================================================================" << endl;
-	if (isMPI)
-		if (HALMode==1)
-			cout << "                  Welcome to HAL MPI Version " << VERSION << endl << endl;
-		else
-			cout << "                  Welcome to HAL-NEW MPI Version " << VERSION << endl << endl;
-	else
-		if (HALMode==1)
-			cout << "                  Welcome to HAL Version " << VERSION << endl << endl;
-		else
-			cout << "                  Welcome to HAL-NEW Version " << VERSION << endl << endl;
+    
+    cout << "Welcome to";
+    
+    if (HALMode==1)
+        cout << "                  Welcome to HAL";
+    else
+        cout << "                  Welcome to HAL-NEW";
+    
+    // show MPI version if so
+    if (isMPI)
+        cout << " MPI";
+    
+    // show regularization if so
+    if (C_REG == 1)
+        cout << " (regularization)";
+    
+    // show version
+    cout << " Version " << VERSION << endl << endl;
 
 	if (isMPI) {
 		cout << "Syntax: mpirun -n <machines> " << progName << " <alignment file> <topology file> <other options>" << endl;
@@ -417,11 +425,19 @@ void UserOptions::outputHALTDUsage(char* progName, int isMPI) {
 // To show the usage of the HAS program
 void UserOptions::outputHASUsage(char* progName, int isMPI) {
 	cout << "================================================================================" << endl;
-	if (isMPI)
-		cout << "                  Welcome to HAS MPI Version " << VERSION << endl << endl;
-	else
-		cout << "                  Welcome to HAS Version " << VERSION << endl << endl;
+    cout << "                  Welcome to HAS";
 
+    // show MPI version if so
+    if (isMPI)
+        cout << " MPI";
+    
+    // show regularization if so
+    if (C_REG == 1)
+        cout << " (regularization)";
+    
+    // show version
+    cout << " Version " << VERSION << endl << endl;
+    
 	if (isMPI) {
 		cout << "Syntax: mpirun -n <machines> " << progName << " <alignment file> <topology file> <other options>" << endl;
 		cout << endl;
@@ -1098,7 +1114,11 @@ void UserOptions::showSummary(int isMPI) {
 	
 	if (isMPI)
 		cout << "MPI ";
-	
+
+    // show regularization if so
+    if (C_REG == 1)
+        cout << " (regularization)";
+
 	cout << "Version " << VERSION << endl << endl;
 
 	cout << "Input file ............................................. " << alignFile << endl;
