@@ -859,7 +859,13 @@ void RALIterationNew (TempRateMats* rateMatrixList, int* topMatrix, int numLineT
 						cout << ",";
 					cout << bestHundredRateMatrices->matrices[0]->at(k);
 				}
-				cout << " [" << ICName << ": " << longDoublToStr(currBestIC,ANS_DECI) << "]" << endl;
+
+                if (C_REG==0) {
+                    cout << " [" << ICName << ": " << longDoublToStr(currBestIC,ANS_DECI) << "]" << endl;
+                } else {
+                    cout << " [" << ICName << "(regularized): " << longDoublToStr(currBestIC,ANS_DECI) << "]" << endl;
+                }
+
 
 				/*
 				if (whichApproach==4) {
