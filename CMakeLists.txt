@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.18)
+cmake_minimum_required (VERSION 3.16)
 
 #######################################################
 # For regularization, use an option -DFLAGS="C_REG"
