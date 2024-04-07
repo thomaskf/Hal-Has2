@@ -565,7 +565,9 @@ void RALIterationNew (TempRateMats* rateMatrixList, int* topMatrix, int numLineT
 		// the number of rate matrices are going to check
 		numMatToCheck = grouping_array[grouping_array.size()-1];
 		grouping_array.pop_back();
-		cout << "[master " << ++masterThresID << "] Checking " << numMatToCheck << " rate matices...." << endl << flush;
+		// cout << "[master " << ++masterThresID << "] Checking " << numMatToCheck << " rate matices...." << endl << flush;
+        // LSJermiin 2024-Mar-10: Replaced line above with line below
+        cout << "[Round " << ++masterThresID << "] Checking " << numMatToCheck << " rate matrices...." << endl << flush;
 
 		// perform optimization on the last 'numMatToCheck' rate matrix
 		jobList.clear();
@@ -1295,17 +1297,16 @@ TempRateMats* loadPreInterResult(char* chkptFile, int num_w, int num_edges, int 
 			}
 
 			// get IC
-			need_recalculate_IC = true;
-            if (numIter == 0)
-                need_recalculate_IC = false;
-			/*
+//			need_recalculate_IC = true;
+//            if (numIter == 0)
+//                need_recalculate_IC = false;
 			if (!getDoubleValues(token, ICName, &IC, 1)) {
 				// The IC name does not match, then the corresponding IC and the lowest possible IC needs to recalculate
 				need_recalculate_IC = true;
 				// continue;
 			} else {
 				need_recalculate_IC = false;
-			}*/
+			}
 
             if (numIter > 0) {
                 // get the details of PS

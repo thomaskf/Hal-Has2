@@ -674,9 +674,12 @@ void RALIterationNew (TempRateMats* jobList, int* topMatrix, int numLineTopMat,
 	int readyJobID = 0;
 	string outMsg = "";
 	
-	if (jobList->size() > 0)
-		cout << "[master " << iterationID << "] Checking " << jobList->size() << " rate matices...." << endl;
-	
+    if (jobList->size() > 0) {
+        // cout << "[master " << iterationID << "] Checking " << jobList->size() << " rate matices...." << endl;
+        //LSJermiin 2024-Mar-10: Replaced line above with line below
+        cout << "[Round " << iterationID << "] Checking " << jobList->size() << " rate matrices...." << endl;
+    }
+
 	while ((!procedureEnd && currJob < jobList->size() && availP > 0) || (!procedureEnd && readyJobExist) || (availP < totalP)) {
 		// either some processors are still running or some jobs are not yet assigned to some processors
 		
@@ -907,9 +910,12 @@ void RALIterationNew (TempRateMats* jobList, int* topMatrix, int numLineTopMat,
 							currLevelNumResults = grouping_array[currLevelID] / opt_method_num;
 							
 							// get the message of number of the candidates going to be checked
-							if (currLevelNumResults > 0)
-								outMsg.append("[master " + intToStr(++iterationID) + "] Checking " + intToStr(currLevelNumResults) + " rate matices....\n");
-							
+                            if (currLevelNumResults > 0) {
+                                // outMsg.append("[master " + intToStr(++iterationID) + "] Checking " + intToStr(currLevelNumResults) + " rate matices....\n");
+                                //LSJermiin 2024-Mar-10: Replaced line above with line below
+                                outMsg.append("[Round " + intToStr(++iterationID) + "] Checking " + intToStr(currLevelNumResults) + " rate matrices....\n");
+                            }
+
 							// move the result of this level from appendResultList to resultList
 							if (groupAllCandidates==1) {
 								TempRateMats* tmp = resultList;
@@ -1083,7 +1089,9 @@ void RALIterationNew (TempRateMats* rateMatrixList, int* topMatrix, int numLineT
 		// the number of rate matrices are going to check
 		numMatToCheck = grouping_array[grouping_array.size()-1];
 		grouping_array.pop_back();
-		cout << "[master " << ++masterThresID << "] Checking " << numMatToCheck << " rate matices...." << endl << flush;
+		// cout << "[master " << ++masterThresID << "] Checking " << numMatToCheck << " rate matices...." << endl << flush;
+        // LSJermiin 2024-Mar-10: Replaced line above with line below
+        cout << "[Round " << ++masterThresID << "] Checking " << numMatToCheck << " rate matrices...." << endl << flush;
 
 		// perform optimization on the last 'numMatToCheck' rate matrix
 		jobList.clear();

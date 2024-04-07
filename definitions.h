@@ -59,13 +59,17 @@
 // The version of the program
 // ==================================================================================================
 
-#define VERSION "2.6.5"
+// #define VERSION "2.6.5"
+// LSJermiin 2024-Mar-10: Changed line above with line below
+#define VERSION "2.6.6"
 
 // ==================================================================================================
 // The contact person of the program
 // ==================================================================================================
 
-#define CONTACTPERSON "Lars Jermiin <Lars.Jermiin@anu.edu.au>, Thomas Wong <Thomas.Wong@anu.edu.au>"
+// #define CONTACTPERSON "Lars Jermiin <Lars.Jermiin@anu.edu.au>, Thomas Wong <Thomas.Wong@anu.edu.au>"
+// LSJermiin 2024-Mar-10: Replaced line above with line below
+#define CONTACTPERSON "Lars Jermiin <Lars.Jermiin@universityofgalway.ie>, Thomas Wong <Thomas.Wong@anu.edu.au>"
 
 // ==================================================================================================
 // Uncomment the following line if the dataset is very large, in order to speed up the program
@@ -77,7 +81,9 @@
 // ==================================================================================================
 
 #define PARAM_DECI 5.0 // the number of decimal places for the resulting parameter values
-#define ANS_DECI 2.0 // the number of decimal places for the resulting IC and log-likelihood values
+// #define ANS_DECI 2.0 // the number of decimal places for the resulting IC and log-likelihood values
+// LSJermiin 2024-Mar-10: Replaced line above with line below
+#define ANS_DECI 5.0 // the number of decimal places for the resulting IC and log-likelihood values
 
 
 // ==================================================================================================
