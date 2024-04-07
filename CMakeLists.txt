@@ -2,6 +2,7 @@ cmake_minimum_required (VERSION 3.18)
 
 #######################################################
 # For regularization, use an option -DFLAGS="C_REG"
+# For static, use an option -DFLAGS="static"
 #######################################################
 
 project (HAL-HAS)
@@ -17,6 +18,15 @@ if (FLAGS MATCHES "C_REG")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DC_REG=1")
     set(HAL_NAME "HAL2-P")
     set(HAS_NAME "HAS2-P")
+endif()
+
+if (UNIX)
+    # build as static binary to run on most machines
+    if (NOT FLAGS MATCHES "static")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -rdynamic")
+    else()
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+    endif()
 endif()
 
 # HAL2 and HAS2
