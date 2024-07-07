@@ -396,6 +396,7 @@ void UserOptions::outputHALTDUsage(char* progName, int isMPI) {
 	cout << "  -i <# of iterations> : Number of iterations performed for each-time" << endl;
 	cout << "                         parameter tuning" << endl;
 	cout << "                         (default: -1 [no limit, run until converge])" << endl;
+    cout << "  -t <HAL result file> : The resulting file from HAL-NEW program" << endl;
 	if (!isMPI)
 		cout << "  -h                   : This help page" << endl << endl;
 

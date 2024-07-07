@@ -61,8 +61,12 @@
 #include <string.h>
 #include <math.h>
 #include "jacobi_eigenvalue.h"
-#include <xmmintrin.h>
 
+#if defined(__ARM_NEON)
+#include "sse2neon.h"
+#else
+#include <xmmintrin.h>
+#endif
 
 // #include "eigenvalue_4_by_4.h"
 

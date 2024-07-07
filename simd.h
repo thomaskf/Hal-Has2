@@ -3,9 +3,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "definitions.h"
+
+#if defined(__ARM_NEON)
+#include "sse2neon.h"
+#else
 #include <smmintrin.h>
 #include <nmmintrin.h>
-#include "definitions.h"
+#endif
 
 #ifdef __linux__     // Linux
 #include <malloc.h>

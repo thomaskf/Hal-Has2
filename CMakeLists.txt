@@ -7,6 +7,35 @@ cmake_minimum_required (VERSION 3.16)
 
 project (HAL-HAS)
 
+# Check if __ARM_NEON is defined
+set (__ARM_NEON "FALSE")
+set (NEON 0)
+if (APPLE)
+    execute_process(
+      COMMAND uname -m
+      RESULT_VARIABLE result
+      OUTPUT_VARIABLE OSX_NATIVE_ARCHITECTURE
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    if(OSX_NATIVE_ARCHITECTURE STREQUAL "arm64")
+        message("APPLE SILICON (M1/M2/M3) DETECTED!")
+        set (__ARM_NEON "TRUE")
+        set (NEON 1)
+    endif()
+elseif (UNIX AND NOT APPLE)  # Unix and Linux
+    execute_process(
+      COMMAND uname -m
+      RESULT_VARIABLE result
+      OUTPUT_VARIABLE OS_NATIVE_ARCHITECTURE
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    if(OS_NATIVE_ARCHITECTURE STREQUAL "aarch64")
+        message("Unix/Linux ARM64 DETECTED!")
+        set (__ARM_NEON "TRUE")
+        set (NEON 1)
+    endif()
+endif()
+
 if (APPLE)
     set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
@@ -84,7 +113,19 @@ set(CPACK_SOURCE_IGNORE_FILES
 
 set (SYSTEM_NAME "${CMAKE_SYSTEM_NAME}")
 if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
-    set (SYSTEM_NAME "macOS-intel")
+    if (OSX_NATIVE_ARCHITECTURE STREQUAL "arm64")
+        set (SYSTEM_NAME "macOS-arm")
+    else()
+        set (SYSTEM_NAME "macOS-intel")
+    endif()
+endif()
+
+if (NOT APPLE AND UNIX)
+    if (__ARM_NEON)
+        set (SYSTEM_NAME "Linux-arm")
+    else()
+        set (SYSTEM_NAME "Linux-intel")
+    endif()
 endif()
 if (BINARY32)
     set (SYSTEM_NAME "${SYSTEM_NAME}32")
