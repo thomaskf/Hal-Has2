@@ -960,6 +960,30 @@ void ParameterSet::loadRateMat(vector<int>& rateMat) {
 	updateRateMat(rateMat, maxRateGrp);
 }
 
+// import the rate matrix string
+// prerequisite: the value of "num_edges" has to be set
+void ParameterSet::loadRateMat(string rateMatStr) {
+    vector<int> rateMat;
+    size_t p1 = 0;
+    size_t p2 = rateMatStr.find_first_of(',', p1);
+    while (p2 != string::npos && p2 > p1) {
+        int r = atoi(rateMatStr.substr(p1,p2-p1).c_str());
+        rateMat.push_back(r);
+        p1 = p2 + 1;
+        p2 = rateMatStr.find_first_of(',', p1);
+    }
+    if (p1 < rateMatStr.length()) {
+        int r = atoi(rateMatStr.substr(p1,rateMatStr.length()-p1).c_str());
+        rateMat.push_back(r);
+    }
+    if (rateMat.size() != num_edges) {
+        cerr << "Error! Incorrect size of the input starting rate matrix" << endl;
+        cerr << "Input starting rate matrix: " << rateMatStr << endl;
+        cerr << "number of edges: " << num_edges << " but number of items inside the input rate matrix: " << rateMat.size() << endl;
+        exit(1);
+    }
+    loadRateMat(rateMat);
+}
 
 // compute the eigenvalues and eigenvectors for the edges
 // if "theEdge" is -1, then do for all edges
@@ -1368,9 +1392,10 @@ AllParameterSet::~AllParameterSet() {
 
 // read the values of w and pi from all the parameter files
 void AllParameterSet::readParamFile(char* paramFile, int num_w, int num_edges) {
-	char* parameterFileName = (char*) malloc (sizeof(char) * (((int)log10(numRateCat))+strlen(paramFile)+8));
+    int n = ((int)log10(numRateCat))+strlen(paramFile)+8;
+	char* parameterFileName = (char*) malloc (sizeof(char) * n);
 	for (int i=0; i<numRateCat; i++) {
-		sprintf(parameterFileName,"%s%i.txt",paramFile,i+1);
+		snprintf(parameterFileName,n,"%s%i.txt",paramFile,i+1);
 		ps[i]->readParamFile(parameterFileName, num_w, num_edges);
 	}
 	free(parameterFileName);

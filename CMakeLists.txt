@@ -42,7 +42,7 @@ if (APPLE)
 endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -msse4.2")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 
 set(HAL_NAME "HAL2")
 set(HAS_NAME "HAS2")
@@ -98,7 +98,7 @@ include (InstallRequiredSystemLibraries)
 set (CPACK_RESOURCE_FILE_LICENSE
      "${CMAKE_CURRENT_SOURCE_DIR}/license.txt")
 
-set (CPACK_PACKAGE_VERSION "2.6.6")
+set (CPACK_PACKAGE_VERSION "2.7")
 
 if(WIN32 OR APPLE)
   set(CPACK_GENERATOR "ZIP")

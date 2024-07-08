@@ -164,6 +164,10 @@ public:
 	// prerequisite: the value of "num_edges" has to be set
 	void loadRateMat(vector<int>& rateMat);
 
+    // import the rate matrix string
+    // prerequisite: the value of "num_edges" has to be set
+    void loadRateMat(string rateMatStr);
+
 	// reset the parameters
 	void reset();
 

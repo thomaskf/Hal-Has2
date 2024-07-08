@@ -146,7 +146,9 @@ void performRAL(UserOptions* options, char* rateGrpFile, char* preChkptFile, int
 	// initialize the starting rate matrix
 	if (options->startRateMatrix!=NULL) {
 		start_ps.loadRateMat(*(options->startRateMatrix));
-	}
+    } else if (!options->inStartRateMat.empty()) {
+        start_ps.loadRateMat(options->inStartRateMat);
+    }
 	
 #ifndef GTRIFO	
 	if (rateGrpFile != NULL) {
@@ -327,7 +329,7 @@ void performRAL(UserOptions* options, char* rateGrpFile, char* preChkptFile, int
 		// print out the content of the best hundred rate matrices
 		string description = "The best 100 arrangements of the rate matrices:";
 		bestHundredRateMatrices.print_content(resultOut, topMatrix, leafList, description, ICName);
-		if (options->listParamBestHAL && bestHundredRateMatrices.size() > 0 && bestHundredRateMatrices.PSs[0]!=NULL) {
+		if (bestHundredRateMatrices.size() > 0 && bestHundredRateMatrices.PSs[0]!=NULL) {
 			// list out the parameters of the best HAL model
 			(*resultOut) << "=====================================================================================" << endl;
 			(*resultOut) << "The corresponding parameters of the best HAL model:" << endl;
@@ -398,7 +400,7 @@ void performRAL(UserOptions* options, char* rateGrpFile, char* preChkptFile, int
 			string description = "The best 100 arrangements of the rate matrices:";
 			bestHundredRateMatrices.print_content(resultOut, topMatrix, leafList, description, ICName);
 
-			if (options->listParamBestHAL && bestHundredRateMatrices.size() > 0 && bestHundredRateMatrices.PSs[0] != NULL) {
+			if (bestHundredRateMatrices.size() > 0 && bestHundredRateMatrices.PSs[0] != NULL) {
 				// list out the parameters of the best HAL model
 				(*resultOut) << "=====================================================================================" << endl;
 				(*resultOut) << "The corresponding parameters of the best HAL model:" << endl;

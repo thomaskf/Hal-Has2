@@ -213,10 +213,8 @@ public:
 	// 2: optimization starts from the state using one model (default)
 	int startOptState;
 	
-	// whether list out the values of the parameters for the best HAL model
-	// 0: Not listing out the values of the parameters for the best HAL model
-	// 1: listing out the values of the parameters for the best HAL model (default)
-	int listParamBestHAL;
+	// the rate matrix to start with
+	string inStartRateMat;
 	
 	// whether TD algorithm will continue after BU algorithm
 	// 0: Not continue with TD algorithm after BU algorithm

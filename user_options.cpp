@@ -154,7 +154,8 @@ void UserOptions::reset() {
 		// original BU algorithm / TD
 		startOptState = DEFAULT_OPT_START_OLD;
 	}
-	listParamBestHAL = 1;
+    // the rate matrix to start with
+    string inStartRateMat = "";
 	continueTD = 1;
 	unrooted = 0;
 	numSteps = -1;
@@ -217,10 +218,12 @@ void UserOptions::outputHALBUUsage(char* progName, int isMPI) {
     // show regularization if so
     if (C_REG == 1)
         cout << " (regularization)";
-    
-    // show version
-    cout << " Version " << VERSION << endl << endl;
 
+#ifdef RELEASE_VERSION
+   // show version
+    cout << " Version " << VERSION << endl << endl;
+#endif
+    
 	if (isMPI) {
 		cout << "Syntax: mpirun -n <machines> " << progName << " <alignment file> <topology file> <other options>" << endl;
 		cout << endl;
@@ -258,8 +261,7 @@ void UserOptions::outputHALBUUsage(char* progName, int isMPI) {
 	cout << "                        2 - treat gaps as missing data (default)" << endl;
 	cout << "  -precise            : More precise optimization, but needs more time." << endl;
 	cout << "                        (default: disable)" << endl;
-
-#ifndef RELEASE_VERSION
+    cout << "  -l <start matrix>   : The rate matrix to start from" << endl;
 
 	cout << "  -v <grp candidates> : 1 - All the potential candidates from the same-level" << endl;
 	cout << "                            iterations are grouped and top K candidates are" << endl;
@@ -272,6 +274,8 @@ void UserOptions::outputHALBUUsage(char* progName, int isMPI) {
 	} else {
 		cout << "                        (default: 1)" << endl;
 	}
+    
+    /* (hidden parameters)
 	if (HALMode==1) {
 		// original BU
 		cout << "  -k <topK value>     : 1 - 100, top K value (default: " << DEFAULT_TOP_K_OLD << ")" << endl;
@@ -296,8 +300,7 @@ void UserOptions::outputHALBUUsage(char* progName, int isMPI) {
 		cout << "                        (default: " << DEFAULT_OPT_START << ")" << endl;
 		// cout << "  -s                   : Use consensus approach (default: disable)" << endl;
 	}
-	
-#endif
+     */
 	
 	/*
 	cout << "  -l                   : 0 - Not listing out the parameters of the best HAL model" << endl;
@@ -668,378 +671,373 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
 
 			switch (flag) {
 
-			case 'f':
-			if (f_option_assigned)
-				duplicateOption = true;
-			else if (value.length() == 0)
-				emptyOption = true;
-			else {
-				f_option_assigned = true;
-				int valueInt = atoi(value.c_str());
-				if (valueInt < 1 || valueInt > 2)
-					*errMsg = "Error! The value for '-f' has to be 1 or 2";
-				else
-					inputFormat = valueInt;
-			}
-			break;
-
-			case 'u':
-				if (u_option_assigned)
-					duplicateOption = true;
-				else if (value.length() == 0)
-					emptyOption = true;
-				else {
-					u_option_assigned = true;
-					int valueInt = atoi(value.c_str());
-					if (valueInt <= 0)
-						*errMsg = "Error! The value for '-u' has to be greater than 0";
-					else
-						numCPUThreads = valueInt;
-				}
-				break;
-
-			case 'k':
-				if (k_option_assigned)
-					duplicateOption = true;
-				else if (value.length() == 0)
-					emptyOption = true;
-				else {
-					k_option_assigned = true;
-					int valueInt = atoi(value.c_str());
-					if (valueInt <= 0)
-						*errMsg = "Error! The value for '-k' has to be greater than 0";
-					else
-						topK = valueInt;
-				}
-				break;
-
-			case 'o':
-				if (o_option_assigned)
-					duplicateOption = true;
-				else {
-					o_option_assigned = true;
-					if (value.length()==0)
-						emptyOption = true;
-					else
-						outputPrefix = value;
-				}
-				break;
-
-			case 't':
-				if (t_option_assigned)
-					duplicateOption = true;
-				else {
-					t_option_assigned = true;
-					if (value.length()==0)
-						emptyOption = true;
-					else
-						rateMatrixFile = value;
-				}
-				break;
-
-			case 'r':
-				if (r_option_assigned)
-					duplicateOption = true;
-				else {
-					r_option_assigned = true;
-					if (value.length() == 0)
-						emptyOption = true;
-					else
-						preLogFile = value;
-				}
-				break;
-
-            case 'z':
-                if (z_option_assigned)
-                    duplicateOption = true;
-                else {
-                    z_option_assigned = true;
-                    if (value.length() == 0)
-                        emptyOption = true;
-                    else
-                        preLog = value;
-                }
+                case 'a':
+                    if (a_option_assigned)
+                        duplicateOption = true;
+                    else {
+                        a_option_assigned = true;
+                        outChkPtFile = 0;
+                    }
                 break;
 
-			case 'i':
-				if (i_option_assigned)
-					duplicateOption = true;
-				else if (value.length() == 0)
-					emptyOption = true;
-				else {
-					i_option_assigned = true;
-					int valueInt = atoi(value.c_str());
-					if (valueInt == 0)
-						*errMsg = "Error! The value for '-i' has to be greater than 0 or -1 (i.e. unlimited)";
-					else
-						numIterations = valueInt;
-				}
-				break;
+                case 'b':
+                    if (b_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        emptyOption = true;
+                    else {
+                        b_option_assigned = true;
+                        tokenizer(value,",",&token);
+                        for (j=0; j<(int)token.size(); j++) {
+                            int valueInt = atoi(token[j].c_str());
+                            if (valueInt < 1 || valueInt > 4) {
+                                *errMsg = "Error! The value for '-b' has to be 1-4";
+                                break;
+                            } else {
+                                ic_list[valueInt-1] = 1;
+                                num_ic_selected++;
+                            }
+                        }
+                    }
+                    break;
+                        
+                case 'c':
+                    if (c_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        emptyOption = true;
+                    else {
+                        c_option_assigned = true;
+                        int valueInt = atoi(value.c_str());
+                        if (valueInt == 0)
+                            *errMsg = "Error! The value for '-c' has to be greater than 0 or -1 (i.e. unlimited)";
+                        else
+                            numMaxCycles = valueInt;
+                    }
+                    break;
 
-			case 'y':
-				if (y_option_assigned)
-					duplicateOption = true;
-				else if (value.length() == 0)
-					emptyOption = true;
-				else {
-					y_option_assigned = true;
-					rateMatrixFile = value; // set the starting matrix
-					numSteps = 1; // only do the first step for bottom-up
-					continueTD = 0; // not proceeding to top-down
-				}
-				break;
+                case 'd':
+                    if (d_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        emptyOption = true;
+                    else {
+                        d_option_assigned = true;
+                        logLDeviation = atof(value.c_str());
+                    }
+                    break;
 
-			case 'c':
-				if (c_option_assigned)
-					duplicateOption = true;
-				else if (value.length() == 0)
-					emptyOption = true;
-				else {
-					c_option_assigned = true;
-					int valueInt = atoi(value.c_str());
-					if (valueInt == 0)
-						*errMsg = "Error! The value for '-c' has to be greater than 0 or -1 (i.e. unlimited)";
-					else
-						numMaxCycles = valueInt;
-				}
-				break;
+                case 'e':
+                    opt_mode.clear();
+                    if (e_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        emptyOption = true;
+                    else {
+                        e_option_assigned = true;
+                        tokenizer(value,",",&token);
+                        for (j=0; j<(int)token.size(); j++) {
+                            opt_mode.push_back(atoi(token[j].c_str()));
+                        }
+                    }
+                    break;
 
-			case 's':
-				if (s_option_assigned)
-					duplicateOption = true;
-				else {
-					s_option_assigned = true;
-					outputConsensus = 1;
-				}
-				break;
+                case 'f':
+                    if (f_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        emptyOption = true;
+                    else {
+                        f_option_assigned = true;
+                        int valueInt = atoi(value.c_str());
+                        if (valueInt < 1 || valueInt > 2)
+                            *errMsg = "Error! The value for '-f' has to be 1 or 2";
+                        else
+                            inputFormat = valueInt;
+                    }
+                break;
 
-			case 'g':
-				if (g_option_assigned)
-					duplicateOption = true;
-				else if (value.length() == 0)
-					emptyOption = true;
-				else {
-					g_option_assigned = true;
-					int valueInt = atoi(value.c_str());
-					if (valueInt < 1 || valueInt > 2)
-						*errMsg = "Error! The value for '-g' has to be 1 or 2";
-					else
-						gapHandling = valueInt;
-				}
-				break;
+                case 'g':
+                    if (g_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        emptyOption = true;
+                    else {
+                        g_option_assigned = true;
+                        int valueInt = atoi(value.c_str());
+                        if (valueInt < 1 || valueInt > 2)
+                            *errMsg = "Error! The value for '-g' has to be 1 or 2";
+                        else
+                            gapHandling = valueInt;
+                    }
+                    break;
 
-			case 'v':
-				if (v_option_assigned)
-					duplicateOption = true;
-				else if (value.length() == 0)
-					emptyOption = true;
-				else {
-					v_option_assigned = true;
-					int valueInt = atoi(value.c_str());
-					if (valueInt < 1 || valueInt > 2)
-						*errMsg = "Error! The value for '-v' has to be 1 or 2";
-					else
-						groupAllCandidates = valueInt;
-				}
-				break;
+                case 'h':
+                    return 2;
+                    break;
 
+                case 'i':
+                    if (i_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        emptyOption = true;
+                    else {
+                        i_option_assigned = true;
+                        int valueInt = atoi(value.c_str());
+                        if (valueInt == 0)
+                            *errMsg = "Error! The value for '-i' has to be greater than 0 or -1 (i.e. unlimited)";
+                        else
+                            numIterations = valueInt;
+                    }
+                    break;
 
-			case 'p':
-				if (value == "recise") {
-					if (precise_option_assigned)
-						duplicateOption = true;
-					else {
-						precise_option_assigned = true;
-						precise = 1;
-					}
-				} else {
-					if (p_option_assigned)
-						duplicateOption = true;
-					else if (value.length() == 0)
-						emptyOption = true;
-					else {
-						p_option_assigned = true;
-						int valueInt = atoi(value.c_str());
-						if (valueInt != 0 && valueInt != 2)
-							*errMsg = "Error! The value for '-p' has to be 0 or 2";
-						else
-							startOptState = valueInt;
-					}
-				}
-				break;
-					
-			case 'm':
-				if (programType!=3 && programType!=4)
-					*errMsg = "Unknown option '-" + string(1,flag);
-				else if (m_option_assigned)
-					duplicateOption = true;
-				else if (value.length() == 0)
-					emptyOption = true;
-				else {
-					m_option_assigned = true;
-					int valueInt = atoi(value.c_str());
-					if (valueInt < 1)
-						*errMsg = "Error! The value for '-m' has to be greater than 0";
-					else
-						minRateCat = valueInt;
-				}
-				break;
+                case 'j':
+                    opt_maxIT.clear();
+                    if (j_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        emptyOption = true;
+                    else {
+                        j_option_assigned = true;
+                        tokenizer(value,",",&token);
+                        for (j=0; j<(int)token.size(); j++) {
+                            opt_maxIT.push_back(atoi(token[j].c_str()));
+                        }
+                    }
+                    break;
 
-			case 'n':
-				if (programType!=3 && programType!=4)
-					*errMsg = "Unknown option '-" + string(1,flag);
-				else if (n_option_assigned)
-					duplicateOption = true;
-				else if (value.length() == 0)
-					emptyOption = true;
-				else {
-					n_option_assigned = true;
-					int valueInt = atoi(value.c_str());
-					if (valueInt < 1)
-						*errMsg = "Error! The value for '-n' has to be greater than 0";
-					else
-						maxRateCat = valueInt;
-				}
-				break;
+                case 'k':
+                    if (k_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        emptyOption = true;
+                    else {
+                        k_option_assigned = true;
+                        int valueInt = atoi(value.c_str());
+                        if (valueInt <= 0)
+                            *errMsg = "Error! The value for '-k' has to be greater than 0";
+                        else
+                            topK = valueInt;
+                    }
+                    break;
 
-			case 'w':
-				if (programType!=3 && programType!=4)
-					*errMsg = "Unknown option '-" + string(1,flag);
-				else if (w_option_assigned)
-					duplicateOption = true;
-				else if (value.length() == 0)
-					emptyOption = true;
-				else {
-					w_option_assigned = true;
-					int valueInt = atoi(value.c_str());
-					if (valueInt < 1)
-						*errMsg = "Error! The value for '-n' has to be greater than 0";
-					else
-						stepRateCat = valueInt;
-				}
-				break;
+                case 'l':
+                    if (l_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        *errMsg = "Error! Invalid value for '-l' which should be a starting rate matrix";
+                    else {
+                        l_option_assigned = true;
+                        inStartRateMat = value;
+                    }
+                    break;
 
-			case 'a':
-			if (a_option_assigned)
-				duplicateOption = true;
-			else {
-				a_option_assigned = true;
-				outChkPtFile = 0;
-			}
-			break;
+                case 'm':
+                    if (programType!=3 && programType!=4)
+                        *errMsg = "Unknown option '-" + string(1,flag);
+                    else if (m_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        emptyOption = true;
+                    else {
+                        m_option_assigned = true;
+                        int valueInt = atoi(value.c_str());
+                        if (valueInt < 1)
+                            *errMsg = "Error! The value for '-m' has to be greater than 0";
+                        else
+                            minRateCat = valueInt;
+                    }
+                    break;
 
-			case 'h':
-				return 2;
-				break;
+                case 'n':
+                    if (programType!=3 && programType!=4)
+                        *errMsg = "Unknown option '-" + string(1,flag);
+                    else if (n_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        emptyOption = true;
+                    else {
+                        n_option_assigned = true;
+                        int valueInt = atoi(value.c_str());
+                        if (valueInt < 1)
+                            *errMsg = "Error! The value for '-n' has to be greater than 0";
+                        else
+                            maxRateCat = valueInt;
+                    }
+                    break;
 
-			case 'e':
-				opt_mode.clear();
-				if (e_option_assigned)
-					duplicateOption = true;
-				else if (value.length() == 0)
-					emptyOption = true;
-				else {
-					e_option_assigned = true;
-					tokenizer(value,",",&token);
-					for (j=0; j<(int)token.size(); j++) {
-						opt_mode.push_back(atoi(token[j].c_str()));
-					}
-				}
-				break;
+                case 'o':
+                    if (o_option_assigned)
+                        duplicateOption = true;
+                    else {
+                        o_option_assigned = true;
+                        if (value.length()==0)
+                            emptyOption = true;
+                        else
+                            outputPrefix = value;
+                    }
+                    break;
 
-			case 'j':
-				opt_maxIT.clear();
-				if (j_option_assigned)
-					duplicateOption = true;
-				else if (value.length() == 0)
-					emptyOption = true;
-				else {
-					j_option_assigned = true;
-					tokenizer(value,",",&token);
-					for (j=0; j<(int)token.size(); j++) {
-						opt_maxIT.push_back(atoi(token[j].c_str()));
-					}
-				}
-				break;
+                case 'p':
+                    if (value == "recise") {
+                        if (precise_option_assigned)
+                            duplicateOption = true;
+                        else {
+                            precise_option_assigned = true;
+                            precise = 1;
+                        }
+                    } else {
+                        if (p_option_assigned)
+                            duplicateOption = true;
+                        else if (value.length() == 0)
+                            emptyOption = true;
+                        else {
+                            p_option_assigned = true;
+                            int valueInt = atoi(value.c_str());
+                            if (valueInt != 0 && valueInt != 2)
+                                *errMsg = "Error! The value for '-p' has to be 0 or 2";
+                            else
+                                startOptState = valueInt;
+                        }
+                    }
+                    break;
+                        
+                case 'q':
+                    if (q_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        emptyOption = true;
+                    else {
+                        q_option_assigned = true;
+                        int valueInt = atoi(value.c_str());
+                        if (valueInt < 0 || valueInt > 1)
+                            *errMsg = "Error! The value for '-q' has to be 0 or 1";
+                        else
+                            continueTD = valueInt;
+                    }
+                    break;
 
-			case 'd':
-				if (d_option_assigned)
-					duplicateOption = true;
-				else if (value.length() == 0)
-					emptyOption = true;
-				else {
-					d_option_assigned = true;
-					logLDeviation = atof(value.c_str());
-				}
-				break;
+                case 'r':
+                    if (r_option_assigned)
+                        duplicateOption = true;
+                    else {
+                        r_option_assigned = true;
+                        if (value.length() == 0)
+                            emptyOption = true;
+                        else
+                            preLogFile = value;
+                    }
+                    break;
 
-			case 'b':
-				if (b_option_assigned)
-					duplicateOption = true;
-				else if (value.length() == 0)
-					emptyOption = true;
-				else {
-					b_option_assigned = true;
-					tokenizer(value,",",&token);
-					for (j=0; j<(int)token.size(); j++) {
-						int valueInt = atoi(token[j].c_str());
-						if (valueInt < 1 || valueInt > 4) {
-							*errMsg = "Error! The value for '-b' has to be 1-4";
-							break;
-						} else {
-							ic_list[valueInt-1] = 1;
-							num_ic_selected++;
-						}
-					}
-				}
-				break;
-					
-			case 'l':
-				if (l_option_assigned)
-					duplicateOption = true;
-				else if (value.length() == 0)
-					emptyOption = true;
-				else {
-					l_option_assigned = true;
-					int valueInt = atoi(value.c_str());
-					if (valueInt < 0 || valueInt > 1)
-						*errMsg = "Error! The value for '-l' has to be 0 or 1";
-					else
-						listParamBestHAL = valueInt;
-				}
-				break;
+                case 's':
+                    if (s_option_assigned)
+                        duplicateOption = true;
+                    else {
+                        s_option_assigned = true;
+                        outputConsensus = 1;
+                    }
+                    break;
 
-			case 'q':
-				if (q_option_assigned)
-					duplicateOption = true;
-				else if (value.length() == 0)
-					emptyOption = true;
-				else {
-					q_option_assigned = true;
-					int valueInt = atoi(value.c_str());
-					if (valueInt < 0 || valueInt > 1)
-						*errMsg = "Error! The value for '-q' has to be 0 or 1";
-					else
-						continueTD = valueInt;
-				}
-				break;
+                case 't':
+                    if (t_option_assigned)
+                        duplicateOption = true;
+                    else {
+                        t_option_assigned = true;
+                        if (value.length()==0)
+                            emptyOption = true;
+                        else
+                            rateMatrixFile = value;
+                    }
+                    break;
 
-			case 'x':
-				if (x_option_assigned)
-					duplicateOption = true;
-				else {
-					x_option_assigned = true;
-					int valueInt = atoi(value.c_str());
-					if (valueInt < 0 || valueInt > 1)
-						*errMsg = "Error! The value for '-x' has to be 0 or 1";
-					else
-						unrooted = valueInt;
-				}
-				break;
+                case 'u':
+                    if (u_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        emptyOption = true;
+                    else {
+                        u_option_assigned = true;
+                        int valueInt = atoi(value.c_str());
+                        if (valueInt <= 0)
+                            *errMsg = "Error! The value for '-u' has to be greater than 0";
+                        else
+                            numCPUThreads = valueInt;
+                    }
+                    break;
 
-			default:
-				*errMsg = "Unknown option '-" + string(1,flag);
-				break;
+                case 'v':
+                    if (v_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        emptyOption = true;
+                    else {
+                        v_option_assigned = true;
+                        int valueInt = atoi(value.c_str());
+                        if (valueInt < 1 || valueInt > 2)
+                            *errMsg = "Error! The value for '-v' has to be 1 or 2";
+                        else
+                            groupAllCandidates = valueInt;
+                    }
+                    break;
+
+                case 'w':
+                    if (programType!=3 && programType!=4)
+                        *errMsg = "Unknown option '-" + string(1,flag);
+                    else if (w_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        emptyOption = true;
+                    else {
+                        w_option_assigned = true;
+                        int valueInt = atoi(value.c_str());
+                        if (valueInt < 1)
+                            *errMsg = "Error! The value for '-n' has to be greater than 0";
+                        else
+                            stepRateCat = valueInt;
+                    }
+                    break;
+
+                case 'x':
+                    if (x_option_assigned)
+                        duplicateOption = true;
+                    else {
+                        x_option_assigned = true;
+                        int valueInt = atoi(value.c_str());
+                        if (valueInt < 0 || valueInt > 1)
+                            *errMsg = "Error! The value for '-x' has to be 0 or 1";
+                        else
+                            unrooted = valueInt;
+                    }
+                    break;
+
+                case 'y':
+                    if (y_option_assigned)
+                        duplicateOption = true;
+                    else if (value.length() == 0)
+                        emptyOption = true;
+                    else {
+                        y_option_assigned = true;
+                        rateMatrixFile = value; // set the starting matrix
+                        numSteps = 1; // only do the first step for bottom-up
+                        continueTD = 0; // not proceeding to top-down
+                    }
+                    break;
+
+                case 'z':
+                    if (z_option_assigned)
+                        duplicateOption = true;
+                    else {
+                        z_option_assigned = true;
+                        if (value.length() == 0)
+                            emptyOption = true;
+                        else
+                            preLog = value;
+                    }
+                    break;
+
+                default:
+                    *errMsg = "Unknown option '-" + string(1,flag);
+                    break;
 
 			} // case
 
