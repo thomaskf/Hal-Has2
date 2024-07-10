@@ -91,8 +91,10 @@ target_link_libraries(${HAS_NAME} PRIVATE Threads::Threads)
 ##############################################################
 # add the install targets
 ##############################################################
-install (TARGETS ${HAL_NAME} DESTINATION bin)
-install (TARGETS ${HAS_NAME} DESTINATION bin)
+install (TARGETS ${HAL_NAME} DESTINATION .)
+install (TARGETS ${HAS_NAME} DESTINATION .)
+install (FILES "${PROJECT_SOURCE_DIR}/license.txt" DESTINATION .)
+install (FILES "${PROJECT_SOURCE_DIR}/user_manual.pdf" DESTINATION .)
 install (FILES "${PROJECT_SOURCE_DIR}/data.phy" DESTINATION example)
 install (FILES "${PROJECT_SOURCE_DIR}/tree.txt" DESTINATION example)
 
