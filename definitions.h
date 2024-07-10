@@ -55,13 +55,16 @@
 #ifndef RAL_RAS_definitions_h
 #define RAL_RAS_definitions_h
 
+#include <config.h>
+
 // ==================================================================================================
 // The version of the program
 // ==================================================================================================
 
-// #define VERSION "2.6.5"
-// LSJermiin 2024-Mar-10: Changed line above with line below
-#define VERSION "2.6.6"
+// The version number is defined in the CMakeLists.txt file
+//#ifndef VERSION
+//    #define VERSION "2.7"
+//#endif
 
 // ==================================================================================================
 // The contact person of the program

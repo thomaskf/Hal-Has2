@@ -204,8 +204,6 @@ void UserOptions::setPreciseModeMaxIT() {
 void UserOptions::outputHALBUUsage(char* progName, int isMPI) {
 	cout << "================================================================================" << endl;
     
-    cout << "Welcome to";
-    
     if (HALMode==1)
         cout << "                  Welcome to HAL";
     else
@@ -249,7 +247,7 @@ void UserOptions::outputHALBUUsage(char* progName, int isMPI) {
 	cout << "                        <checkpoint file>, which was outputted from the last" << endl;
 	cout << "                        execution of the program, stores all the immediate" << endl;
 	cout << "                        results (with file extension: '.chkpt.txt')" << endl;
-    cout << "  -z <previous log>   : Load the log file too (for testing only)" << endl;
+    // cout << "  -z <previous log>   : Load the log file too (for testing only)" << endl;
 	cout << "  -i <# of iterations>: Number of iterations performed for each-time" << endl;
 	cout << "                        parameter tuning" << endl;
 	cout << "                        (default: -1 [no limit, run until converge])" << endl;
@@ -261,8 +259,10 @@ void UserOptions::outputHALBUUsage(char* progName, int isMPI) {
 	cout << "                        2 - treat gaps as missing data (default)" << endl;
 	cout << "  -precise            : More precise optimization, but needs more time." << endl;
 	cout << "                        (default: disable)" << endl;
-    cout << "  -l <start matrix>   : The rate matrix to start from" << endl;
-
+    cout << "  -l <start matrix>   : The rate matrix to start from. It is not a file," << endl;
+    cout << "                        but a string representing the rate matrix." << endl;
+    cout << "                        For example: -l 1,1,1,1,1,2,1,1,2,2,2,2,2,2" << endl;
+    /*
 	cout << "  -v <grp candidates> : 1 - All the potential candidates from the same-level" << endl;
 	cout << "                            iterations are grouped and top K candidates are" << endl;
 	cout << "                            selected to proceed to the next level;" << endl;
@@ -274,6 +274,7 @@ void UserOptions::outputHALBUUsage(char* progName, int isMPI) {
 	} else {
 		cout << "                        (default: 1)" << endl;
 	}
+    */
     
     /* (hidden parameters)
 	if (HALMode==1) {

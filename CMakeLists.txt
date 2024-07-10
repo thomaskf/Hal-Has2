@@ -7,6 +7,8 @@ cmake_minimum_required (VERSION 3.16)
 
 project (HAL-HAS)
 
+set (CPACK_PACKAGE_VERSION "2.7")
+
 # Check if __ARM_NEON is defined
 set (__ARM_NEON "FALSE")
 set (NEON 0)
@@ -35,6 +37,15 @@ elseif (UNIX AND NOT APPLE)  # Unix and Linux
         set (NEON 1)
     endif()
 endif()
+
+configure_file (
+  "${PROJECT_SOURCE_DIR}/config.h.in"
+  "${PROJECT_BINARY_DIR}/config.h"
+)
+
+# add the binary tree to the search path for include files
+# so that we will find config.h
+include_directories("${PROJECT_BINARY_DIR}")
 
 if (APPLE)
     set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
@@ -98,8 +109,6 @@ include (InstallRequiredSystemLibraries)
 
 set (CPACK_RESOURCE_FILE_LICENSE
      "${CMAKE_CURRENT_SOURCE_DIR}/license.txt")
-
-set (CPACK_PACKAGE_VERSION "2.7")
 
 if(WIN32 OR APPLE)
   set(CPACK_GENERATOR "ZIP")

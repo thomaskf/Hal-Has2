@@ -17,9 +17,12 @@ R : A Computer Language for Statistical Data Analysis version 3.0.1 (http://cran
 Copyright (C) 2000-2004 The R Core Team
 This software is licensed under GNU GPL
 
-
 JACOBI_EIGENVALUE.C (http://people.sc.fsu.edu/~jburkardt/c_src/jacobi_eigenvalue/jacobi_eigenvalue.c)
 Copyright (C) 2003-2013 John Burkardt
 This software is licensed under GNU LGPL (http://www.gnu.org/licenses/lgpl.html)
+
+sse2neon (https://github.com/DLTcollab/sse2neon)
+Copyright (c) 2015-2024 SSE2NEON Contributors
+This software is licensed under the MIT License
 
 ___________________________________________________________________

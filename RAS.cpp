@@ -245,7 +245,7 @@ void performUpilson(char* alignFile, char* topFile, int minNumRateCat, int maxNu
 	if (outResultFile.length() > 0)
 		cout << "Result file: " << outResultFile << endl;
 
-	cout << "HAS for Upsilon Version " << VERSION << " finishes" << endl;
+	cout << "HAS for Upsilon Version " << CPACK_PACKAGE_VERSION << " finishes" << endl;
 }
 
 
