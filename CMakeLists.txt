@@ -32,7 +32,7 @@ elseif (UNIX AND NOT APPLE)  # Unix and Linux
       OUTPUT_STRIP_TRAILING_WHITESPACE
     )
     if(OS_NATIVE_ARCHITECTURE STREQUAL "aarch64")
-        message("Unix/Linux ARM64 DETECTED!")
+        message("** Unix/Linux ARM64 DETECTED!")
         set (__ARM_NEON "TRUE")
         set (NEON 1)
     endif()
