@@ -9,8 +9,8 @@ The software was written in C++, and it has been tested under linux and MacOS pl
 ### To compile HAL2 and HAS2
 
 ```
-$ tar -zxvf Hal-Has2-x.x.tar.gz
-$ cd Hal-Has2-x.x
+$ tar -zxvf Hal-Has2-x.x.x.tar.gz
+$ cd Hal-Has2-x.x.x
 $ mkdir build
 $ cd build
 $ cmake ..
@@ -24,8 +24,8 @@ Then two executable files will appear:
 ### To compile HAL2-P and HAS2-P
 
 ```
-$ tar -zxvf Hal-Has2-x.x.tar.gz
-$ cd Hal-Has2-x.x
+$ tar -zxvf Hal-Has2-x.x.x.tar.gz
+$ cd Hal-Has2-x.x.x
 $ mkdir build_p
 $ cd build_p
 $ cmake -DFLAGS=C_REG ..
