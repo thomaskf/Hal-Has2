@@ -36,6 +36,31 @@ Then two executable files will appear:
 * HAL2-P	: The HAL2 program based on BIC formula with penalty for convergence
 * HAS2-P	: The HAS2 program based on BIC formula with penalty for convergence
 
+### To compile static files (for Linux only)
+
+In order to compile a static file, use the option `-DFLAGS=static`
+
+For example, to compile static files HAL2 and HAS2:
+
+```
+$ tar -zxvf Hal-Has2-x.x.x.tar.gz
+$ cd Hal-Has2-x.x.x
+$ mkdir build
+$ cd build
+$ cmake -DFLAGS=static ..
+$ make -j
+```
+For example, to compile static files HAL2-P and HAS2-P
+
+```
+$ tar -zxvf Hal-Has2-x.x.x.tar.gz
+$ cd Hal-Has2-x.x.x
+$ mkdir build_p
+$ cd build_p
+$ cmake -DFLAGS=C_REG,static ..
+$ make -j
+```
+
 ## HAL2 / HAL2-P
 
 Every unique partition of edges represents a HAL model. Since the total number of <b>HAL</B> models is a Bell number, an exhaustive search of all models is infeasible. Therefore we use an algorithm that searches a subset of the <b>HAL</B> models to identify the optimal and/or near optimal models. HAL includes two algorithms: a bottom-up algorithm, followed by a top-down algorithm.
