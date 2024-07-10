@@ -7,7 +7,7 @@ cmake_minimum_required (VERSION 3.16)
 
 project (HAL-HAS)
 
-set (CPACK_PACKAGE_VERSION "2.7")
+set (CPACK_PACKAGE_VERSION "2.7.1")
 
 # Check if __ARM_NEON is defined
 set (__ARM_NEON "FALSE")
