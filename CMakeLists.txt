@@ -20,7 +20,7 @@ if (APPLE)
       OUTPUT_STRIP_TRAILING_WHITESPACE
     )
     if(OSX_NATIVE_ARCHITECTURE STREQUAL "arm64")
-        message("APPLE SILICON (M1/M2/M3) DETECTED!")
+        message("** APPLE SILICON (M1/M2/M3) DETECTED!")
         set (__ARM_NEON "TRUE")
         set (NEON 1)
     endif()
@@ -62,6 +62,7 @@ if (FLAGS MATCHES "C_REG")
     set(HAL_NAME "HAL2-P")
     set(HAS_NAME "HAS2-P")
 endif()
+message("** BUILDING ${HAL_NAME} and ${HAS_NAME}")
 
 if (UNIX)
     # build as static binary to run on most machines
