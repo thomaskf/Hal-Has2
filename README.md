@@ -38,7 +38,7 @@ Then two executable files will appear:
 
 ### To compile static files (for Linux only)
 
-In order to compile a static file, use the option `-DFLAGS=static`
+Use the option `-DFLAGS=static` to compile static files.
 
 For example, to compile static files HAL2 and HAS2:
 
