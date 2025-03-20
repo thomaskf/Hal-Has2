@@ -77,11 +77,11 @@ endif()
 # HAL2 and HAS2
 
 add_executable(${HAL_NAME}
-RAL_new.cpp alignment.cpp charSet.cpp main_BU_new1.cpp matrix.cpp optimization.cpp core.cpp rateMatrixResult.cpp parameters.cpp user_options.cpp lbfgsb_new.cpp gradient.cpp jacobi_eigenvalue.cpp tool_box.cpp RAL_common.cpp global.cpp
+RAL_new.cpp alignment.cpp charSet.cpp main_BU_new1.cpp matrix.cpp optimization.cpp core.cpp rateMatrixResult.cpp parameters.cpp user_options.cpp lbfgsb_new.cpp gradient.cpp jacobi_eigenvalue.cpp tool_box.cpp RAL_common.cpp global.cpp RAL_new.h alignment.h charSet.h matrix.h optimization.h core.h rateMatrixResult.h parameters.h user_options.h lbfgsb_new.h gradient.h jacobi_eigenvalue.h tool_box.h RAL_common.h global.h
 )
 
 add_executable(${HAS_NAME}
-alignment.cpp charSet.cpp main_RAS.cpp matrix.cpp optimization.cpp core.cpp rateMatrixResult.cpp parameters.cpp RAS.cpp user_options.cpp lbfgsb_new.cpp gradient.cpp jacobi_eigenvalue.cpp tool_box.cpp RAL_common.cpp global.cpp
+alignment.cpp charSet.cpp main_RAS.cpp matrix.cpp optimization.cpp core.cpp rateMatrixResult.cpp parameters.cpp RAS.cpp user_options.cpp lbfgsb_new.cpp gradient.cpp jacobi_eigenvalue.cpp tool_box.cpp RAL_common.cpp global.cpp alignment.h charSet.h matrix.h optimization.h core.h rateMatrixResult.h parameters.h RAS.h user_options.h lbfgsb_new.h gradient.h jacobi_eigenvalue.h tool_box.h RAL_common.h global.h
 )
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
