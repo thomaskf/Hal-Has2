@@ -138,6 +138,9 @@ void performRAL(UserOptions* options, char* rateGrpFile, char* preChkptFile, int
 		start_vs.setGTRUpilson();
 		alignment.setGTRUpilson();
 	}
+	if (options->norootfreq) {
+		start_vs.setNoRootFreq();
+	}
 	start_ps.reset();
 	start_vs.resetAllVariables(alignment);
 	int initSeed = 1;
@@ -1034,7 +1037,9 @@ void optimThread(TempRateMats* rateMatChkLst, int* topMatrix, int numLineTopMat,
     
 	if (userOptions->isGTRUpilson)
 		vs.setGTRUpilson();
-    
+	if (userOptions->norootfreq)
+		vs.setNoRootFreq();
+
 	for (int rateMatID=0; rateMatID<totalJobs; rateMatID++) {
 
 		bool proceed = false;

@@ -64,6 +64,7 @@ VariableSet::VariableSet(int num_chars) {
 	probXGivenInv = NULL;
 	rootNodeFreq = NULL;
 	isGTRUpilson = 0;
+	norootfreq = 0;
 
 	// the following variables are for optimization
 	alpha_t = NULL;
@@ -125,6 +126,11 @@ VariableSet::~VariableSet() {
 void VariableSet::setGTRUpilson() {
 	// set "isGTRUpilson" to TRUE
 	isGTRUpilson = 1;
+}
+
+void VariableSet::setNoRootFreq() {
+	// set "norootfreq" to TRUE
+	norootfreq = 1;
 }
 
 void VariableSet::readVariableFile(char* fileName) {

@@ -684,10 +684,12 @@ int Optim::optimizeAllParam(int numIterations, double& loglikelihood, double& IC
 
 		}
 
+        if (!vs->norootfreq) {
 #ifndef GTRIFO
-		// optimizing the root vector
-		getOptRootVector(isShareRootVector, maxit);
+			// optimizing the root vector
+			getOptRootVector(isShareRootVector, maxit);
 #endif
+		}
 
 		// cout << "optimizing the root vector" << endl;
 		// loglikelihood = getLogLikelihood(ps->allCondProb, topMatrix, numLineTopMat, (*algn), (*vs), num_chars);
@@ -1189,20 +1191,20 @@ static void initialUpdate(Optim* op, double *values, int num, vector<int>* edges
 						curr_pi_t[k] = values[k];
 					}
 				}
-			}
 #ifdef GTRIFO
-			curr_ps = op->ps;
-			curr_pi = &(curr_ps->pi[(edges->at(0)) * num_chars]);
-			curr_pi_t = &(curr_ps->pi_t[(edges->at(0)) * num_chars]);
-			for (int k=0; k<num; k++) {
-				op->vs->rootNodeFreq[k] = curr_pi[k];
-				op->vs->rootNodeFreq_t[k] = curr_pi_t[k];
-			}
-			for (int k=0; k<num; k++) {
-				op->vs->probXGivenInv[k] = curr_pi[k];
-				op->vs->probXGivenInv_t[k] = curr_pi_t[k];
-			}
+				curr_ps = op->ps;
+				curr_pi = &(curr_ps->pi[(edges->at(0)) * num_chars]);
+				curr_pi_t = &(curr_ps->pi_t[(edges->at(0)) * num_chars]);
+				for (int k=0; k<num; k++) {
+					op->vs->rootNodeFreq[k] = curr_pi[k];
+					op->vs->rootNodeFreq_t[k] = curr_pi_t[k];
+				}
+				for (int k=0; k<num; k++) {
+					op->vs->probXGivenInv[k] = curr_pi[k];
+					op->vs->probXGivenInv_t[k] = curr_pi_t[k];
+				}
 #endif
+			}
 		}
 
 		// added for upilson model (i.e. op->paramType == 5)

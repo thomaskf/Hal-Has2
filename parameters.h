@@ -88,12 +88,15 @@ public:
 	double* invar_constant;
 	
 	bool isGTRUpilson;
+	bool norootfreq;
 
 	VariableSet(int num_chars); // constructor
 	VariableSet(int num_alpha, int num_chars); // constructor
 	~VariableSet(); //destructor
 
 	void setGTRUpilson(); // set "isGTRUpilson" to TRUE
+    
+	void setNoRootFreq(); // set "norootfreq" to TRUE
 
 	void readVariableFile(char* fileName); // read the values of the variables from the file
 
