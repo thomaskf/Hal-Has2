@@ -175,6 +175,8 @@ void Optim::getOptValues(int type, int isShare, int maxit) {
 		numValues = num_w + num_chars;
 	} else if (type == 7) {
 		numValues = num_edges + num_rateMat * num_w + num_rateMat * num_chars;
+	} else if (type == 8 && vs->isGTRUpilson) {
+		numValues = num_rateCat;
 	} else if (type == 8) {
 #ifndef GTRIFO
 		numValues = num_rateCat+1+num_chars;
@@ -1306,8 +1308,11 @@ static void initialUpdate(Optim* op, double *values, int num, vector<int>* edges
 	} else if (op->paramType == 8) {
 		// compute the sum for alphas and beta
 		sum_values = 0.0;
-		for (i=0; i<op->num_rateCat+1; i++) {
+		for (i=0; i<op->num_rateCat; i++) {
 			sum_values += values[i];
+		}
+		if (!op->vs->isGTRUpilson) {
+			sum_values += values[i]; // beta value
 		}
 		if (sum_values > 0.0) {
 			// alpha values
@@ -1315,25 +1320,28 @@ static void initialUpdate(Optim* op, double *values, int num, vector<int>* edges
 				op->vs->alpha[i] = values[i] / sum_values;
 				op->vs->alpha_t[i] = values[i];
 			}
-			// beta value
-			op->vs->beta = values[i] / sum_values;
-			op->vs->beta_t = values[i];
+			if (!op->vs->isGTRUpilson) {
+				// beta value
+				op->vs->beta = values[i] / sum_values;
+				op->vs->beta_t = values[i];
+			}
 		}
 		
 #ifndef GTRIFO
-		// compute the sum for nucleotide distribution along constant sites
-		sum_values = 0.0;
-		for (i=0; i<num_chars; i++) {
-			sum_values += values[i+op->num_rateCat+1];
-		}
-		if (sum_values > 0.0) {
-			// nucleotide distribution along constant sites
+			// compute the sum for nucleotide distribution along constant sites
+			sum_values = 0.0;
 			for (i=0; i<num_chars; i++) {
-				op->vs->probXGivenInv[i] = values[i+op->num_rateCat+1]/sum_values;
-				op->vs->probXGivenInv_t[i] = values[i+op->num_rateCat+1];
+				sum_values += values[i+op->num_rateCat+1];
 			}
-		}
+			if (sum_values > 0.0) {
+				// nucleotide distribution along constant sites
+				for (i=0; i<num_chars; i++) {
+					op->vs->probXGivenInv[i] = values[i+op->num_rateCat+1]/sum_values;
+					op->vs->probXGivenInv_t[i] = values[i+op->num_rateCat+1];
+				}
+			}
 #endif
+		}
 
 	} else if (op->paramType == 9) {
 		// nucleotide distribution along the root

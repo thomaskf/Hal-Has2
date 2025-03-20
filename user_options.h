@@ -231,6 +231,8 @@ public:
 	int maxNumRatMat;
 	
 	int precise; // More precise optimzation, but needs more time (default: 0)
+    
+	int isGTRUpilson; // no invariable category
 
 	// =================================
 	// Functions

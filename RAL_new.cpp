@@ -134,6 +134,10 @@ void performRAL(UserOptions* options, char* rateGrpFile, char* preChkptFile, int
 	int num_alpha = 1;
 	ParameterSet start_ps(num_w, numEdges, num_chars);
 	VariableSet start_vs(num_alpha, num_chars);
+	if (options->isGTRUpilson) {
+		start_vs.setGTRUpilson();
+		alignment.setGTRUpilson();
+	}
 	start_ps.reset();
 	start_vs.resetAllVariables(alignment);
 	int initSeed = 1;
@@ -1027,7 +1031,10 @@ void optimThread(TempRateMats* rateMatChkLst, int* topMatrix, int numLineTopMat,
 	int numOptMethods = (int)userOptions->opt_mode.size();
 
 	string ICName = getICName(userOptions->info_criteria);
-
+    
+	if (userOptions->isGTRUpilson)
+		vs.setGTRUpilson();
+    
 	for (int rateMatID=0; rateMatID<totalJobs; rateMatID++) {
 
 		bool proceed = false;

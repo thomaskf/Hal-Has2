@@ -160,6 +160,7 @@ void UserOptions::reset() {
 	unrooted = 0;
 	numSteps = -1;
 	precise = 0;
+	isGTRUpilson = 0;
 	setDefaultModeMaxIT();
 }
 
@@ -851,7 +852,9 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     break;
 
                 case 'n': // define the maximum number of rate categories (for HAS)
-                    if (programType!=3 && programType!=4)
+                    if (value == "orate") // option: -norate : no invariable category (for HAL)
+                        isGTRUpilson = 1;
+                    else if (programType!=3 && programType!=4)
                         *errMsg = "Unknown option '-" + string(1,flag);
                     else if (n_option_assigned)
                         duplicateOption = true;
@@ -1259,7 +1262,11 @@ void UserOptions::showSummary(int isMPI) {
 	if (precise == 1) {
 		cout << "Precise optimization process............................ Yes" << endl;
 	}
-	
+
+	if (isGTRUpilson == 1) {
+		cout << "No invariable category.................................. Yes" << endl;
+	}
+
 	// running top-down algorithm after bottom-up algorithm
 	if (programType == 1) {
 		cout << "running top-down algorithm after bottom-up algorithm.... ";
