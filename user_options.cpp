@@ -160,6 +160,7 @@ void UserOptions::reset() {
 	unrooted = 0;
 	numSteps = -1;
 	precise = 0;
+	anyInvarCat = 1;
 	setDefaultModeMaxIT();
 }
 
@@ -851,7 +852,9 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     break;
 
                 case 'n': // define the maximum number of rate categories (for HAS)
-                    if (programType!=3 && programType!=4)
+                    if (value == "orate") // option: -norate : no invariable category (for HAL)
+                        anyInvarCat = 0;
+                    else if (programType!=3 && programType!=4)
                         *errMsg = "Unknown option '-" + string(1,flag);
                     else if (n_option_assigned)
                         duplicateOption = true;
@@ -880,7 +883,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     break;
 
                 case 'p':
-                    if (value == "recise") { // for precise computation
+                    if (value == "recise") { // option: -precise : for precise computation
                         if (precise_option_assigned)
                             duplicateOption = true;
                         else {
