@@ -161,6 +161,7 @@ void UserOptions::reset() {
 	numSteps = -1;
 	precise = 0;
 	isGTRUpilson = 0;
+	norootfreq = 0;
 	setDefaultModeMaxIT();
 }
 
@@ -854,6 +855,8 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                 case 'n': // define the maximum number of rate categories (for HAS)
                     if (value == "orate") // option: -norate : no invariable category (for HAL)
                         isGTRUpilson = 1;
+                    else if (value == "orootfreq") // option: -norootfreq : no root frequencies, and it will follow those of the rate matrix along the root edges
+                        norootfreq = 1;
                     else if (programType!=3 && programType!=4)
                         *errMsg = "Unknown option '-" + string(1,flag);
                     else if (n_option_assigned)

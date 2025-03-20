@@ -233,6 +233,8 @@ public:
 	int precise; // More precise optimzation, but needs more time (default: 0)
     
 	int isGTRUpilson; // no invariable category
+    
+	int norootfreq; // no root nucleotide frequencies, as they follow those rate matrices along the root edges.
 
 	// =================================
 	// Functions
