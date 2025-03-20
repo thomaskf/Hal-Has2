@@ -223,9 +223,6 @@ public:
 	
 	// whether it is unrooted tree
 	int unrooted;
-	
-	// whether there is any invariable category (default: yes)
-	int anyInvarCat;
 
 	vector<int>* startRateMatrix;
 
