@@ -672,7 +672,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
 
 			switch (flag) {
 
-                case 'a':
+                case 'a': // whether to output checkpoint file
                     if (a_option_assigned)
                         duplicateOption = true;
                     else {
@@ -681,7 +681,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                 break;
 
-                case 'b':
+                case 'b': // which IC to use, AIC/BIC
                     if (b_option_assigned)
                         duplicateOption = true;
                     else if (value.length() == 0)
@@ -702,7 +702,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
                         
-                case 'c':
+                case 'c': // maximum number of cycles
                     if (c_option_assigned)
                         duplicateOption = true;
                     else if (value.length() == 0)
@@ -717,7 +717,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 'd':
+                case 'd': // the deviation allowed between the log-likelihood values
                     if (d_option_assigned)
                         duplicateOption = true;
                     else if (value.length() == 0)
@@ -728,7 +728,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 'e':
+                case 'e': // the optimization modes used
                     opt_mode.clear();
                     if (e_option_assigned)
                         duplicateOption = true;
@@ -743,7 +743,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 'f':
+                case 'f': // the format of the input alignment
                     if (f_option_assigned)
                         duplicateOption = true;
                     else if (value.length() == 0)
@@ -758,7 +758,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                 break;
 
-                case 'g':
+                case 'g': // the way to handle the gaps
                     if (g_option_assigned)
                         duplicateOption = true;
                     else if (value.length() == 0)
@@ -773,11 +773,11 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 'h':
+                case 'h': // help menu
                     return 2;
                     break;
 
-                case 'i':
+                case 'i': // specify the number of iterations in optimization process
                     if (i_option_assigned)
                         duplicateOption = true;
                     else if (value.length() == 0)
@@ -792,7 +792,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 'j':
+                case 'j': // specify the values of maxIT in optimization process
                     opt_maxIT.clear();
                     if (j_option_assigned)
                         duplicateOption = true;
@@ -807,7 +807,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 'k':
+                case 'k': // specify the value of topK
                     if (k_option_assigned)
                         duplicateOption = true;
                     else if (value.length() == 0)
@@ -822,7 +822,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 'l':
+                case 'l': // define the starting rate matrix
                     if (l_option_assigned)
                         duplicateOption = true;
                     else if (value.length() == 0)
@@ -833,7 +833,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 'm':
+                case 'm': // define the minimum number of rate categories (for HAS)
                     if (programType!=3 && programType!=4)
                         *errMsg = "Unknown option '-" + string(1,flag);
                     else if (m_option_assigned)
@@ -850,7 +850,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 'n':
+                case 'n': // define the maximum number of rate categories (for HAS)
                     if (programType!=3 && programType!=4)
                         *errMsg = "Unknown option '-" + string(1,flag);
                     else if (n_option_assigned)
@@ -867,7 +867,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 'o':
+                case 'o': // define the output file prefix
                     if (o_option_assigned)
                         duplicateOption = true;
                     else {
@@ -880,7 +880,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     break;
 
                 case 'p':
-                    if (value == "recise") {
+                    if (value == "recise") { // for precise computation
                         if (precise_option_assigned)
                             duplicateOption = true;
                         else {
@@ -903,7 +903,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
                         
-                case 'q':
+                case 'q': // whether to continue the top-down algorithm after HAL
                     if (q_option_assigned)
                         duplicateOption = true;
                     else if (value.length() == 0)
@@ -918,7 +918,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 'r':
+                case 'r': // to recover from the previous checkpoint file
                     if (r_option_assigned)
                         duplicateOption = true;
                     else {
@@ -930,7 +930,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 's':
+                case 's': // whether to output the consensus answer
                     if (s_option_assigned)
                         duplicateOption = true;
                     else {
@@ -939,7 +939,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 't':
+                case 't': // specify the rate matrix according to the input file
                     if (t_option_assigned)
                         duplicateOption = true;
                     else {
@@ -951,7 +951,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 'u':
+                case 'u': // number of CPU threads
                     if (u_option_assigned)
                         duplicateOption = true;
                     else if (value.length() == 0)
@@ -981,7 +981,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 'w':
+                case 'w':  // specify the step for number of categories (HAS)
                     if (programType!=3 && programType!=4)
                         *errMsg = "Unknown option '-" + string(1,flag);
                     else if (w_option_assigned)
@@ -1011,7 +1011,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 'y':
+                case 'y':  // optimize the parameters according to the matrix file and no search algorithm will be performed
                     if (y_option_assigned)
                         duplicateOption = true;
                     else if (value.length() == 0)
@@ -1024,7 +1024,7 @@ int UserOptions::readArguments(int argc, char** argv, string* errMsg) {
                     }
                     break;
 
-                case 'z':
+                case 'z': // recover from the previous log file
                     if (z_option_assigned)
                         duplicateOption = true;
                     else {
