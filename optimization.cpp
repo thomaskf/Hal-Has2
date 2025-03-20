@@ -1327,6 +1327,7 @@ static void initialUpdate(Optim* op, double *values, int num, vector<int>* edges
 			}
 		}
 		
+		if (!op->vs->isGTRUpilson) {
 #ifndef GTRIFO
 			// compute the sum for nucleotide distribution along constant sites
 			sum_values = 0.0;
