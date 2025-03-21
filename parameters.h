@@ -70,6 +70,8 @@
 #define max_MAXIT 1000
 #define MIN_PROB_VALUE 1.0e-10 // the minimum value for the probability matrix
 
+class ParameterSet;
+
 class VariableSet {
 public:
 	double beta;
@@ -105,6 +107,9 @@ public:
 	// set up the parameters for optimisation method
 	void set_for_opt();
 
+	// set the first rootNodeFreq same as the nucleotide frequency on one of the root edges
+	void setRootFreqSameRootEdge(ParameterSet* ps);
+    
 	void randomInitAllVariables(); // randomly initialize the variables
 
 	// copy the whole content (except rateIDs) from another instance of ParameterSet

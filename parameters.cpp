@@ -234,6 +234,12 @@ void VariableSet::set_for_opt() {
 	}
 }
 
+// set the first rootNodeFreq same as the nucleotide frequency on one of the root edges
+void VariableSet::setRootFreqSameRootEdge(ParameterSet* ps) {
+	int i = (ps->num_edges-1) * num_chars;
+	for (int k=0; k<num_chars; k++)
+		rootNodeFreq[k] = ps->pi[i+k];
+}
 
 void VariableSet::randomInitAllVariables() {
 	// randomly initialize the variables

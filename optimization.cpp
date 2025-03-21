@@ -1207,6 +1207,16 @@ static void initialUpdate(Optim* op, double *values, int num, vector<int>* edges
 			}
 		}
 
+		// for norootfreq option
+		// set the first rootNodeFreq same as the nucleotide frequency on one of the root edges
+		if (op->vs->norootfreq) {
+			if (op->isShare) {
+				op->vs->setRootFreqSameRootEdge(op->ps_set->ps[0]);
+			} else {
+				op->vs->setRootFreqSameRootEdge(op->ps);
+			}
+		}
+        
 		// added for upilson model (i.e. op->paramType == 5)
 		if (op->paramType == 5) {
 			curr_ps = op->ps_set->ps[0];
