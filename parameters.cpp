@@ -767,8 +767,17 @@ void ParameterSet::showContent(string &outStr, int* topMatrix, vector<string>* l
 						outStr.append(intToStr(topMatrix[i]));
 					}
 				}
-				for (int j=0; j<num_w; j++) {
-					outStr.append("\t" + longDoublToStr(w[i*num_w+j],PARAM_DECI));
+				// normalize the rate matrix so that the last item = 1.0
+				if (w[i*num_w+num_w-1] > 0.0) {
+					for (int j=0; j<num_w-1; j++) {
+						double v = w[i*num_w+j] / w[i*num_w+num_w-1];
+						outStr.append("\t" + longDoublToStr(v,PARAM_DECI));
+					}
+					outStr.append("\t" + longDoublToStr(1.0,PARAM_DECI));
+				} else {
+					for (int j=0; j<num_w; j++) {
+						outStr.append("\t" + longDoublToStr(w[i*num_w+j],PARAM_DECI));
+					}
 				}
 				for (int j=0; j<num_chars; j++) {
 					outStr.append("\t" + longDoublToStr(pi[i*num_chars+j],PARAM_DECI));
